@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/StarDance.Domain.props" />
+</Project>

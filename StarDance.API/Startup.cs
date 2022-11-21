@@ -32,9 +32,9 @@ public class Startup
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = AuthOptions.ISSUER,
+                    ValidIssuer = AuthOptions.Issuer,
                     ValidateAudience = true,
-                    ValidAudience = AuthOptions.AUDIENCE,
+                    ValidAudience = AuthOptions.Audience,
                     ValidateLifetime = true,
                     IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
                     ValidateIssuerSigningKey = true
@@ -50,6 +50,7 @@ public class Startup
         services.AddScoped<IClientService, ClientService>();
         services.AddScoped<ITeacherService, TeacherService>();
         services.AddScoped<IQueueService, QueueService>();
+        services.AddScoped<IAbsenceService, AbsenceService>();
         
         
         services.AddScoped<JwtService>();

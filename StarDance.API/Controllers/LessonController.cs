@@ -19,105 +19,85 @@ namespace StarDance.API.Controllers;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<List<LessonReadDto>> GetAll(CancellationToken cancellationToken)
         {
-            var lessonReadDtos = await _lessonService.GetAllLessonsAsync();
+            var lessonReadDtos = await _lessonService.GetAllLessonsAsync(cancellationToken);
 
-            return Ok(lessonReadDtos);
+            return lessonReadDtos;
 
         }
         
-        [HttpGet("paginated")]
-        public async Task<IActionResult> GetPaginatedLessons(PagedRequest pagedRequest)
+        [HttpPost("paginated")]
+        public async Task<PaginatedResult<LessonReadDto>> GetPaginatedLessons(PagedRequest pagedRequest, CancellationToken cancellationToken)
         {
-            var lessonReadDtos = await _lessonService.GetPagedResult(pagedRequest);
-            return Ok(lessonReadDtos);
+            var lessonReadDtos = await _lessonService.GetPagedResult(pagedRequest, cancellationToken);
+            return lessonReadDtos;
         }
         
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<LessonReadDto> GetById(int id, CancellationToken cancellationToken)
         {
-            var lessonReadDto = await _lessonService.GetLessonByIdAsync(id);
-            if (lessonReadDto != null)
-            {
-                return Ok(lessonReadDto);
-            }
-            return NotFound();
+            var lessonReadDto = await _lessonService.GetLessonByIdAsync(id, cancellationToken);
+            return lessonReadDto;
         }
 
         [HttpGet("{dancetype}")]
-        public async Task<IActionResult> GetByDancetype(string dancetype)
+        public async Task<LessonReadDto> GetByDancetype(string dancetype, CancellationToken cancellationToken)
         {
-            var lessonReadDto = await _lessonService.GetLessonByDancetypeAsync(dancetype);
-            if (lessonReadDto != null)
-            {
-                return Ok(lessonReadDto);
-            }
-            return NotFound();
+            var lessonReadDto = await _lessonService.GetLessonByDancetypeAsync(dancetype, cancellationToken);
+            return lessonReadDto;
         }
         
         [HttpPost]
-        public async Task<IActionResult> CreateLesson([FromBody] LessonUpdateDto lessonUpdateDto, CancellationToken cancellationToken)
+        public async Task<LessonReadDto> CreateLesson([FromBody] LessonUpdateDto lessonUpdateDto, CancellationToken cancellationToken)
         {
             var lessonReadDto = await _lessonService.CreateLessonAsync(lessonUpdateDto, cancellationToken);
-            return Ok(lessonReadDto);
+            return lessonReadDto;
         }
         
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLesson(int id, CancellationToken cancellationToken)
+        public async Task<bool> DeleteLesson(int id, CancellationToken cancellationToken)
         {
             var isDeleted = await _lessonService.DeleteLessonAsync(id, cancellationToken);
 
-            return isDeleted ? NoContent() : NotFound();
+            return isDeleted;
         }
         
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateLesson(int id, [FromBody] LessonUpdateDto lessonUpdateDto, CancellationToken cancellationToken)
+        public async Task<LessonReadDto> UpdateLesson(int id, LessonUpdateDto lessonUpdateDto, CancellationToken cancellationToken)
         {
             var lessonReadDto = await _lessonService.UpdateLessonAsync(id, lessonUpdateDto, cancellationToken);
-            return Ok(lessonReadDto);
-        }
-
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> PartialUpdateLesson(int id, [FromBody] LessonPartialUpdateDto lessonPartialUpdateDto, CancellationToken cancellationToken)
-        {
-            var lessonReadDto = await _lessonService.UpdateLessonDetailsAsync(id, lessonPartialUpdateDto, cancellationToken);
-            return Ok(lessonReadDto);
+            return lessonReadDto;
         }
         
         [HttpPost("clientsLessons")]
-        public async Task<IActionResult> AddClientToLesson([FromBody] LessonClientCreateDto lessonClientCreateDto, CancellationToken cancellationToken)
+        public async Task<LessonReadDto> AddClientToLesson(LessonClientCreateDto lessonClientCreateDto, CancellationToken cancellationToken)
         {
             var lessonReadDto = await _lessonService.AddClientToLessonAsync(lessonClientCreateDto, cancellationToken);
-            return Ok(lessonReadDto);
+            return lessonReadDto;
         }
         
         
         [HttpDelete("clientLesson")]
-        public async Task<IActionResult> DeleteClientFromLesson([FromBody] LessonClientCreateDto lessonClientCreateDto, CancellationToken cancellationToken)
-        {
+        public async Task DeleteClientFromLesson(LessonClientCreateDto lessonClientCreateDto, CancellationToken cancellationToken)
+        { 
             await _lessonService.DeleteClientFromLessonAsync(lessonClientCreateDto, cancellationToken);
-            return Ok();
         }
         
         [HttpGet("lessonsOfClient/{id}")]
-        public async Task<IActionResult> GetLessonsByClient(int id)
+        public async Task<List<LessonReadDto>> GetLessonsByClient(int id, CancellationToken cancellationToken)
         {
-            var lessonReadDto = await _lessonService.GetLessonsByClientId(id);
-            if (lessonReadDto != null)
-            {
-                return Ok(lessonReadDto);
-            }
-            return NotFound();
+            var lessonReadDto = await _lessonService.GetLessonsByClientId(id, cancellationToken);
+            return lessonReadDto;
         }
         
         
         [HttpPost("clientIsAtLesson")]
-        public async Task<IActionResult> CheckClientIsAtLesson([FromBody] LessonClientCreateDto lessonClientCreateDto)
+        public async Task<bool> IsClientAtLesson(LessonClientCreateDto lessonClientCreateDto, CancellationToken cancellationToken)
         {
-            var result = await _lessonService.CheckClientIsAtLessonAsync(lessonClientCreateDto);
-            return Ok(result);
+            var result = await _lessonService.IsClientAtLessonAsync(lessonClientCreateDto, cancellationToken);
+            return result;
         }
         
 

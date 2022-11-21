@@ -9,7 +9,7 @@ namespace StarDance.DAL.Extensions;
 
 public static class QueryableExtensions
 {
-    public static async Task<PaginatedResult<T>> CreatePaginatedResult<T>(this IQueryable<T> query, PagedRequest pagedRequest)
+    public static async Task<PaginatedResult<T>> CreatePaginatedResult<T>(this IQueryable<T> query, PagedRequest pagedRequest, CancellationToken cancellationToken)
             where T : Entity
     {
         query = query.ApplyFilters(pagedRequest);
@@ -21,7 +21,7 @@ public static class QueryableExtensions
             
             var projectionResult = query.Paginate(pagedRequest);
             
-            var listResult = await projectionResult.ToListAsync();
+            var listResult = await projectionResult.ToListAsync(cancellationToken);
 
             return new PaginatedResult<T>()
             {
@@ -34,13 +34,8 @@ public static class QueryableExtensions
 
         private static IQueryable<T> Paginate<T>(this IQueryable<T> query, PagedRequest pagedRequest)
         {
-            if (pagedRequest.PageIndex != 0 && pagedRequest.PageSize != 0)
-            {
-                var entities = query.Skip(pagedRequest.PageIndex * pagedRequest.PageSize).Take(pagedRequest.PageSize);
-                return entities;
-            }
-
-            return query;
+            var entities = query.Skip(pagedRequest.PageIndex * pagedRequest.PageSize).Take(pagedRequest.PageSize);
+            return entities;
         }
 
         private static IQueryable<T> Sort<T>(this IQueryable<T> query, PagedRequest pagedRequest)

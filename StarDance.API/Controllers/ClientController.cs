@@ -18,64 +18,49 @@ namespace StarDance.API.Controllers;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<List<ClientReadDto>> GetAll(CancellationToken cancellationToken)
         {
-            var clientReadDtos = await _clientService.GetAllClientsAsync();
+            var clientReadDtos = await _clientService.GetAllClientsAsync(cancellationToken);
 
-            return Ok(clientReadDtos);
+            return clientReadDtos;
         }
         
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ClientReadDto> GetById(int id, CancellationToken cancellationToken)
         {
-            var clientReadDto = await _clientService.GetByIdAsync(id);
-            if (clientReadDto != null)
-            {
-                return Ok(clientReadDto);
-            }
-            return NotFound();
+            var clientReadDto = await _clientService.GetByIdAsync(id, cancellationToken);
+            return clientReadDto;
         }
 
         [HttpGet("{email}")]
-        public async Task<IActionResult> GetByEmail(string email)
+        public async Task<ClientReadDto> GetByEmail(string email, CancellationToken cancellationToken)
         {
-            var clientReadDto = await _clientService.GetByEmailAsync(email);
-            if (clientReadDto != null)
-            {
-                return Ok(clientReadDto);
-            }
-            return NotFound();
+            var clientReadDto = await _clientService.GetByEmailAsync(email, cancellationToken);
+            return clientReadDto;
         }
         
         [HttpPost]
-        public async Task<IActionResult> CreateClient([FromBody] ClientRegisterDto clientRegisterDto, CancellationToken cancellationToken)
+        public async Task<ClientReadDto> CreateClient([FromBody] ClientRegisterDto clientRegisterDto, CancellationToken cancellationToken)
         {
             var clientReadDto = await _clientService.CreateClientAsync(clientRegisterDto, cancellationToken);
-            return Ok(clientReadDto);
+            return clientReadDto;
         }
         
         
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteClient(int id, CancellationToken cancellationToken)
+        public async Task<bool> DeleteClient(int id, CancellationToken cancellationToken)
         {
             var isDeleted = await _clientService.DeleteClientAsync(id, cancellationToken);
 
-            return isDeleted ? NoContent() : NotFound();
+            return isDeleted;
         }
         
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateClient(int id, [FromBody] ClientUpdateDto clientUpdateDto, CancellationToken cancellationToken)
+        public async Task<ClientReadDto> UpdateClient(int id, ClientUpdateDto clientUpdateDto, CancellationToken cancellationToken)
         {
             var clientReadDto = await _clientService.UpdateClientAsync(id, clientUpdateDto, cancellationToken);
-            return Ok(clientReadDto);
-        }
-
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> PartialUpdateClient(int id, [FromBody] ClientPartialUpdateDto clientPartialUpdateDto, CancellationToken cancellationToken)
-        {
-            var clientReadDto = await _clientService.UpdateClientDetailsAsync(id, clientPartialUpdateDto, cancellationToken);
-            return Ok(clientReadDto);
+            return clientReadDto;
         }
         
         

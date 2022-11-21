@@ -1,6 +1,7 @@
 using AutoMapper;
 using StarDance.Common.Dtos.LessonDtos;
 using StarDance.Common.Dtos.TeacherDtos;
+using StarDance.Common.Helpers;
 using StarDance.Domain;
 
 namespace StarDance.BLL.Profiles;
@@ -16,5 +17,7 @@ public class TeacherProfile: Profile
             .ForMember(x => x.DanceType, y => y.MapFrom(z => z.DanceTypeId));
         CreateMap<TeacherPartialUpdateDto, Teacher>()
             .ForMember(x => x.DanceType, y => y.MapFrom(z => z.DanceTypeId));
+            
+        CreateMap<PaginatedResult<Teacher>, PaginatedResult<TeacherReadDto>>();
     }
 }

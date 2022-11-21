@@ -12,12 +12,10 @@ public class ClientService : IClientService
 {
     private readonly IMapper _mapper;
     private readonly IRepository<User> _repository;
-    private readonly IRepository<Lesson> _lessonRepository;
 
-    public ClientService(IRepository<User> repo, IRepository<Lesson> lessonRepository, IMapper mapper)
+    public ClientService(IRepository<User> repo, IMapper mapper)
     {
         _repository = repo;
-        _lessonRepository = lessonRepository;
         _mapper = mapper;
     }
 
@@ -29,27 +27,26 @@ public class ClientService : IClientService
         return _mapper.Map<ClientReadDto>(client);
     }
 
-    public async Task<List<ClientReadDto>> GetAllClientsAsync()
+    public async Task<List<ClientReadDto>> GetAllClientsAsync(CancellationToken cancellationToken)
     {
-        var clients =  await _repository.GetAllAsync( 
+        var clients =  await _repository.GetAllAsync( cancellationToken,
             client => client.Lessons,
-            client => client.Queues,
-            client => client.Absences);
+            client => client.Queues);
         var clientReadDtos = _mapper.Map<List<ClientReadDto>>(clients);
         
         return clientReadDtos;
     }
     
-    public async Task<ClientReadDto> GetByEmailAsync(string email)
+    public async Task<ClientReadDto> GetByEmailAsync(string email, CancellationToken cancellationToken)
     {
-        var client = await _repository.FindAsync(client => client.Email == email);
+        var client = await _repository.FindAsync(client => client.Email == email, cancellationToken);
         var clientDto = _mapper.Map<ClientReadDto>(client);
         return clientDto;
     }
 
-    public async Task<ClientReadDto> GetByIdAsync(int id)
+    public async Task<ClientReadDto> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
-        var client = await _repository.GetByIdAsync(id, client => client.Lessons);
+        var client = await _repository.GetByIdAsync(id, cancellationToken, client => client.Lessons);
         var clientDto = _mapper.Map<ClientReadDto>(client);
         return clientDto;
     }
@@ -57,58 +54,26 @@ public class ClientService : IClientService
 
     public async Task<ClientReadDto> UpdateClientAsync(int id, ClientUpdateDto dto, CancellationToken cancellationToken)
     {
-        var clientModel = await _repository.GetByIdAsync(id);
+        var clientModel = await _repository.GetByIdAsync(id, cancellationToken);
         if (clientModel == null)
         {
             throw new ClientDoesNotExistException("Client doesn't exists");
         }
         
         _mapper.Map(dto,clientModel);
-        await _repository.UpdateAsync(clientModel, cancellationToken);
+         _repository.Update(clientModel);
         await _repository.SaveChangesAsync(cancellationToken);
 
-        var clientReadDto = _mapper.Map<ClientReadDto>(clientModel);
-        return clientReadDto;
-    }
-
-    public async Task<ClientReadDto> UpdateClientDetailsAsync(int id, ClientPartialUpdateDto dto, CancellationToken cancellationToken)
-    {
-        var clientModel = await _repository.GetByIdAsync(id);
-        if (clientModel == null)
-        {
-            throw new Exception("Client doesn't exists");
-        }
-
-        if (!string.IsNullOrWhiteSpace(dto.Name))
-            clientModel.Name = dto.Name;
-
-        if (!string.IsNullOrWhiteSpace(dto.Surname))
-            clientModel.Surname = dto.Surname;
-
-        if (!string.IsNullOrWhiteSpace(dto.Phone))
-            clientModel.Phone = dto.Phone;
-        
-        if (!string.IsNullOrWhiteSpace(dto.Email))
-            clientModel.Email = dto.Email;
-            
-        if (!string.IsNullOrWhiteSpace(dto.Login))
-            clientModel.Login = dto.Login;
-        
-        if (!string.IsNullOrWhiteSpace(dto.Password))
-            clientModel.Password = dto.Password;
-
-        await _repository.UpdateAsync(clientModel, cancellationToken);
-        await _repository.SaveChangesAsync(cancellationToken);
         var clientReadDto = _mapper.Map<ClientReadDto>(clientModel);
         return clientReadDto;
     }
     
     public async Task<bool> DeleteClientAsync(int id, CancellationToken cancellationToken)
     {
-        var client = await _repository.GetByIdAsync(id);
+        var client = await _repository.GetByIdAsync(id, cancellationToken);
         if (client != null)
         {
-            await _repository.DeleteAsync(client, cancellationToken);
+            _repository.Delete(client);
             await _repository.SaveChangesAsync(cancellationToken);
             return true;
         }

@@ -7,6 +7,6 @@ public interface IQueueService
 {
     Task AddClientToQueueAsync(LessonClientCreateDto dto, CancellationToken cancellationToken);
     Task DeleteClientFromQueueAsync(LessonClientCreateDto dto, CancellationToken cancellationToken);
-    Task<bool> CheckClientIsInQueueAsync(LessonClientCreateDto dto);
-    Task<int> GetOrderOfQueueAsync(LessonClientCreateDto dto);
+    Task<bool> IsClientInQueueAsync(LessonClientCreateDto dto, CancellationToken cancellationToken);
+    Task<int> GetOrderOfQueueAsync(LessonClientCreateDto dto, CancellationToken cancellationToken);
 }

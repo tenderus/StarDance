@@ -23,15 +23,16 @@ public class QueueService : IQueueService
         _clientRepository = clientRepository;
     }
 
-    public async Task<int> GetOrderOfQueueAsync(LessonClientCreateDto dto)
+    public async Task<int> GetOrderOfQueueAsync(LessonClientCreateDto dto, CancellationToken cancellationToken)
     {
-        var client = await _clientRepository.GetByIdAsync(dto.ClientId);
+        var client = await _clientRepository.GetByIdAsync(dto.ClientId, cancellationToken);
         if (client == null)
         {
             throw new ClientDoesNotExistException("Client with such id doesn't exists");
         }
 
-        var lesson = await _lessonRepository.GetByIdAsync(dto.LessonId, lesson => lesson.Clients,
+        var lesson = await _lessonRepository.GetByIdAsync(dto.LessonId, cancellationToken,
+            lesson => lesson.Clients,
             lesson => lesson.Queues);
         if (lesson == null)
         {
@@ -39,7 +40,7 @@ public class QueueService : IQueueService
         }
 
         var queue = await _repository.FindAsync(queue =>
-            queue.ClientId == dto.ClientId && queue.LessonId == dto.LessonId);
+            queue.ClientId == dto.ClientId && queue.LessonId == dto.LessonId, cancellationToken);
 
         if (queue != null)
         {
@@ -49,15 +50,17 @@ public class QueueService : IQueueService
         return 0;
     }
     
-    public async Task<bool> CheckClientIsInQueueAsync(LessonClientCreateDto dto)
+    public async Task<bool> IsClientInQueueAsync(LessonClientCreateDto dto, CancellationToken cancellationToken)
     {
-        var client = await _clientRepository.GetByIdAsync(dto.ClientId);
+        var client = await _clientRepository.GetByIdAsync(dto.ClientId, cancellationToken);
         if (client == null)
         {
             throw new ClientDoesNotExistException("Client with such id doesn't exists");
         }
 
-        var lesson = await _lessonRepository.GetByIdAsync(dto.LessonId, lesson => lesson.Clients, lesson => lesson.Queues);
+        var lesson = await _lessonRepository.GetByIdAsync(dto.LessonId,
+            cancellationToken, 
+            lesson => lesson.Clients, lesson => lesson.Queues);
         if (lesson == null)
         {
             throw new LessonDoesNotExistException("Lesson with such id doesn't exists");
@@ -70,22 +73,26 @@ public class QueueService : IQueueService
 
     public async Task AddClientToQueueAsync(LessonClientCreateDto lessonClientCreateDto, CancellationToken cancellationToken)
     {
-        var client = await _clientRepository.GetByIdAsync(lessonClientCreateDto.ClientId);
+        var client = await _clientRepository.GetByIdAsync(lessonClientCreateDto.ClientId, cancellationToken);
         if (client == null)
         {
             throw new ClientDoesNotExistException("Client with such id doesn't exists");
         }
 
-        var lesson = await _lessonRepository.GetByIdAsync(lessonClientCreateDto.LessonId, lesson => lesson.Clients, lesson => lesson.Queues);
+        var lesson = await _lessonRepository.GetByIdAsync(lessonClientCreateDto.LessonId,
+            cancellationToken,
+            lesson => lesson.Clients, lesson => lesson.Queues);
         if (lesson == null)
         {
             throw new LessonDoesNotExistException("Lesson with such id doesn't exists");
         }
 
-        var queueModel = new QueueUpdateDto();
-        queueModel.ClientId = lessonClientCreateDto.ClientId;
-        queueModel.LessonId = lessonClientCreateDto.LessonId;
-        queueModel.NumberOfOrder = lesson.Queues.Count + 1;
+        var queueModel = new QueueUpdateDto
+        {
+            ClientId = lessonClientCreateDto.ClientId,
+            LessonId = lessonClientCreateDto.LessonId,
+            NumberOfOrder = lesson.Queues.Count + 1
+        };
         if (lesson.Queues.FirstOrDefault(x => x.ClientId == lessonClientCreateDto.ClientId) is not null)
         {
             throw new ClientAlreadyRegisteredAtLessonException("Client is already in queue");
@@ -93,20 +100,21 @@ public class QueueService : IQueueService
         
         var queue = _mapper.Map<Queue>(queueModel);
         lesson.Queues.Add(queue);
-        await _lessonRepository.UpdateAsync(lesson, cancellationToken);
+        _lessonRepository.Update(lesson);
         await _lessonRepository.SaveChangesAsync(cancellationToken);
 
     }
 
     public async Task DeleteClientFromQueueAsync(LessonClientCreateDto lessonClientCreateDto, CancellationToken cancellationToken)
     {
-        var client = await _clientRepository.GetByIdAsync(lessonClientCreateDto.ClientId);
+        var client = await _clientRepository.GetByIdAsync(lessonClientCreateDto.ClientId, cancellationToken);
         if (client == null)
         {
             throw new ClientDoesNotExistException("Client with such id doesn't exists");
         }
 
-        var lesson = await _lessonRepository.GetByIdAsync(lessonClientCreateDto.LessonId, lesson => lesson.Clients,
+        var lesson = await _lessonRepository.GetByIdAsync(lessonClientCreateDto.LessonId, cancellationToken, 
+            lesson => lesson.Clients,
             lesson => lesson.Queues);
         if (lesson == null)
         {
@@ -122,11 +130,12 @@ public class QueueService : IQueueService
                 {
                     lessonQueue.NumberOfOrder--;
                 }
+
             }
 
             if (queue != null)
             {
-                await _repository.DeleteAsync(queue, cancellationToken);
+                _repository.Delete(queue);
                 await _repository.SaveChangesAsync(cancellationToken);
             }
         }

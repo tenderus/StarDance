@@ -17,32 +17,30 @@ public class QueueController : ControllerBase
     }
 
     [HttpPost("clientQueueOrder")]
-    public async Task<IActionResult> GetOrderOfQueue([FromBody] LessonClientCreateDto dto)
+    public async Task<int> GetOrderOfQueue(LessonClientCreateDto dto, CancellationToken cancellationToken)
     {
-        var numberOfQueueOrder = await _queueService.GetOrderOfQueueAsync(dto);
+        var numberOfQueueOrder = await _queueService.GetOrderOfQueueAsync(dto, cancellationToken);
 
-        return Ok(numberOfQueueOrder);
+        return numberOfQueueOrder;
 
     }
     
     [HttpPost("clientsQueues")]
-    public async Task<IActionResult> AddClientToQueue([FromBody] LessonClientCreateDto lessonClientCreateDto, CancellationToken cancellationToken)
+    public async Task AddClientToQueue(LessonClientCreateDto lessonClientCreateDto, CancellationToken cancellationToken)
     {
         await _queueService.AddClientToQueueAsync(lessonClientCreateDto, cancellationToken);
-        return Ok();
     }
         
     [HttpDelete("clientsQueue")]
-    public async Task<IActionResult> DeleteClientFromQueue([FromBody] LessonClientCreateDto lessonClientCreateDto, CancellationToken cancellationToken)
+    public async Task DeleteClientFromQueue(LessonClientCreateDto lessonClientCreateDto, CancellationToken cancellationToken)
     {
         await _queueService.DeleteClientFromQueueAsync(lessonClientCreateDto, cancellationToken);
-        return Ok();
     }
     
     [HttpPost("clientIsInQueue")]
-    public async Task<IActionResult> CheckClientIsInQueue([FromBody] LessonClientCreateDto lessonClientCreateDto)
+    public async Task<bool> CheckClientIsInQueue(LessonClientCreateDto lessonClientCreateDto, CancellationToken cancellationToken)
     {
-        var result = await _queueService.CheckClientIsInQueueAsync(lessonClientCreateDto);
-        return Ok(result);
+        var result = await _queueService.IsClientInQueueAsync(lessonClientCreateDto, cancellationToken);
+        return result;
     }
 }

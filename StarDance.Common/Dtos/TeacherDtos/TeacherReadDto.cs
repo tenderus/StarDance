@@ -6,9 +6,13 @@ namespace StarDance.Common.Dtos.TeacherDtos;
 
 public class TeacherReadDto
 {
-    
     public ClientReadDto User { get; set; }
     
-    public int DanceTypeId { get; set; }
+    public DanceTypeReadDto DanceType { get; set; }
     
+    public int Age { get; set; }
+    
+    public int YearsOfExperience { get; set; }
+    
+    public string Description { get; set; }
 }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using StarDance.BLL.Interfaces;
 using StarDance.Common.Dtos.ClientDtos;
 using StarDance.Common.Dtos.TeacherDtos;
+using StarDance.Common.Helpers;
 
 namespace StarDance.API.Controllers;
 
@@ -17,67 +18,57 @@ public class TeacherController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllTeachers()
+    public async Task<List<TeacherReadDto>> GetAllTeachers(CancellationToken cancellationToken)
     {
-        var teacherReadDtos = await _teacherService.GetAllTeachersAsync();
+        var teacherReadDtos = await _teacherService.GetAllTeachersAsync(cancellationToken);
 
-        return Ok(teacherReadDtos);
+        return teacherReadDtos;
+    }
+    
+    [HttpPost("paginated")]
+    public async Task<PaginatedResult<TeacherReadDto>> GetPaginatedLessons(PagedRequest pagedRequest, CancellationToken cancellationToken)
+    {
+        var teachersReadDtos = await _teacherService.GetPagedResult(pagedRequest, cancellationToken);
+        return teachersReadDtos;
     }
 
     [HttpGet]
     [Route("{id:int}")]
-    public async Task<IActionResult> GetTeacherById(int id)
+    public async Task<TeacherReadDto> GetTeacherById(int id, CancellationToken cancellationToken)
     {
-        var teacherReadDto = await _teacherService.GetTeacherByIdAsync(id);
-        if (teacherReadDto != null)
-        {
-            return Ok(teacherReadDto);
-        }
-    
-        return NotFound();
+        var teacherReadDto = await _teacherService.GetTeacherByIdAsync(id, cancellationToken);
+        return teacherReadDto;
     }
     
     [HttpGet("{dancetype}")]
-    public async Task<IActionResult> GetTeacherByDancetype(string dancetype)
+    public async Task<TeacherReadDto> GetTeacherByDancetype(string dancetype, CancellationToken cancellationToken)
     {
-        var teacherReadDto = await _teacherService.GetTeacherByDancetypeAsync(dancetype);
-        if (teacherReadDto != null)
-        {
-            return Ok(teacherReadDto);
-        }
-    
-        return NotFound();
+        var teacherReadDto = await _teacherService.GetTeacherByDancetypeAsync(dancetype, cancellationToken);
+        return teacherReadDto;
     }
     
     [HttpPost]
-    public async Task<IActionResult> CreateTeacher([FromBody] TeacherUpdateDto teacherUpdateDto, CancellationToken cancellationToken)
+    public async Task<TeacherReadDto> CreateTeacher(TeacherUpdateDto teacherUpdateDto, CancellationToken cancellationToken)
     {
         var teacherReadDto = await _teacherService.AddTeacherAsync(teacherUpdateDto, cancellationToken);
-        return Ok(teacherReadDto);
+        return teacherReadDto;
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteTeacher(int id, CancellationToken cancellationToken)
+    public async Task<bool> DeleteTeacher(int id, CancellationToken cancellationToken)
     {
         var isDeleted = await _teacherService.DeleteTeacherAsync(id, cancellationToken);
     
-        return isDeleted ? NoContent() : NotFound();
+        return isDeleted;
     }
     
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateTeacher(int id, [FromBody] TeacherUpdateDto teacherUpdateDto, CancellationToken cancellationToken)
+    public async Task<TeacherReadDto> UpdateTeacher(int id, [FromBody] TeacherUpdateDto teacherUpdateDto, CancellationToken cancellationToken)
     {
         var teacherReadDto = await _teacherService.UpdateTeacherAsync(id, teacherUpdateDto, cancellationToken);
-        return Ok(teacherReadDto);
+        return teacherReadDto;
     }
     
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> PartialUpdateTeacher(int id,
-        [FromBody] TeacherPartialUpdateDto teacherPartialUpdateDto, CancellationToken cancellationToken)
-    {
-        var teacherReadDto = await _teacherService.UpdateTeacherDetailsAsync(id, teacherPartialUpdateDto, cancellationToken);
-        return Ok(teacherReadDto);
-    }
 
 }  
         

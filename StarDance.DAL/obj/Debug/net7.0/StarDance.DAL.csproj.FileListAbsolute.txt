@@ -3,9 +3,6 @@
 /Users/tany/Projects/StarDance/StarDance.DAL/obj/Debug/net7.0/StarDance.DAL.AssemblyInfoInputs.cache
 /Users/tany/Projects/StarDance/StarDance.DAL/obj/Debug/net7.0/StarDance.DAL.AssemblyInfo.cs
 /Users/tany/Projects/StarDance/StarDance.DAL/obj/Debug/net7.0/StarDance.DAL.csproj.CoreCompileInputs.cache
-/Users/tany/Projects/StarDance/StarDance.DAL/bin/Debug/net7.0/StarDance.Domain.deps.json
-/Users/tany/Projects/StarDance/StarDance.DAL/bin/Debug/net7.0/StarDance.Domain.runtimeconfig.json
-/Users/tany/Projects/StarDance/StarDance.DAL/bin/Debug/net7.0/StarDance.Domain
 /Users/tany/Projects/StarDance/StarDance.DAL/bin/Debug/net7.0/StarDance.DAL.deps.json
 /Users/tany/Projects/StarDance/StarDance.DAL/bin/Debug/net7.0/StarDance.DAL.dll
 /Users/tany/Projects/StarDance/StarDance.DAL/bin/Debug/net7.0/StarDance.DAL.pdb

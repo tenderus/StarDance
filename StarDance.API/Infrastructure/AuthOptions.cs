@@ -5,12 +5,12 @@ namespace StarDance.API.Infrastructure;
 
 public class AuthOptions
 {
-    public const string ISSUER = "StarDanceApp";
-        public const string AUDIENCE = "StarDanceClient";
-        private const string KEY = "7VVUSPVGSC22QC374M6Y!";
+    public const string Issuer = "StarDanceApp";
+    public const string Audience = "StarDanceClient";
+    private const string Key = "7VVUSPVGSC22QC374M6Y!";
 
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {
-            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(KEY));
+            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Key));
         }
-    }
+}

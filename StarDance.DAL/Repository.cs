@@ -26,63 +26,55 @@ public class Repository<T> : IRepository<T> where T : Entity
         await _context.Set<T>().AddAsync(entity, cancellationToken);
     }
 
-    public async Task DeleteAsync(T entity, CancellationToken cancellationToken) 
+    public void Delete(T entity) 
     {
         _context.Set<T>().Remove(entity);
     }
     
 
-    public async Task<List<T>> FindAllAsync(Expression<Func<T, bool>> predicate)
+    public async Task<List<T>> FindAllAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken)
     {
-        return await _context.Set<T>().Where(predicate).ToListAsync();
+        return await _context.Set<T>().Where(predicate).ToListAsync(cancellationToken);
     }
     
-    public async Task<List<T>> FindAllWithIncludeAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
+    public async Task<List<T>> FindAllWithIncludeAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken, params Expression<Func<T, object>>[] includeProperties)
     {
-        var query =  IncludeProperties(includeProperties).Where(predicate).ToListAsync();
+        var query =  IncludeProperties(includeProperties).Where(predicate).ToListAsync(cancellationToken);
         return await query;
     }
 
-    public async Task<List<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
+    public async Task<List<T>> GetAllAsync(CancellationToken cancellationToken, params Expression<Func<T, object>>[] includeProperties)
     {
         var query =  IncludeProperties(includeProperties);
-        var queryToList = await query.ToListAsync();
+        var queryToList = await query.ToListAsync(cancellationToken);
         return queryToList;
     }
     
-    public IQueryable<T> GetAll(params Expression<Func<T, object>>[] includeProperties)
+    public async Task<T> GetByIdAsync(int id, CancellationToken cancellationToken, params Expression<Func<T, object>>[] includeProperties)
     {
-        var query = IncludeProperties(includeProperties);
-        
-        return query;
-    }
-    
-
-    public async Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includeProperties)
-    {
-        var query = await IncludeProperties(includeProperties).FirstOrDefaultAsync(x => x.Id == id);
+        var query = await IncludeProperties(includeProperties).FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         return query;
     }
 
-    public async Task UpdateAsync(T entity, CancellationToken cancellationToken)
+    public void Update(T entity)
     {
         _context.Entry(entity).State = EntityState.Modified;
     }
 
-    public async Task<T> FindAsync(Expression<Func<T, bool>> predicate)
+    public async Task<T> FindAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken)
     {
-        return await _context.Set<T>().FirstOrDefaultAsync(predicate);
+        return await _context.Set<T>().FirstOrDefaultAsync(predicate, cancellationToken);
     }
 
-    public async Task<PaginatedResult<T>> GetPagedData(PagedRequest pagedRequest)
+    public async Task<PaginatedResult<T>> GetPagedData(PagedRequest pagedRequest, CancellationToken cancellationToken)
     {
-        return await _context.Set<T>().CreatePaginatedResult<T>(pagedRequest);
+        return await _context.Set<T>().CreatePaginatedResult<T>(pagedRequest, cancellationToken);
     }
     
-    public async Task<PaginatedResult<T>> GetPagedDataWithInclude(PagedRequest pagedRequest, params Expression<Func<T, object>>[] includeProperties)
+    public async Task<PaginatedResult<T>> GetPagedDataWithInclude(PagedRequest pagedRequest, CancellationToken cancellationToken, params Expression<Func<T, object>>[] includeProperties)
     {
         var query = IncludeProperties(includeProperties);
-        return await query.CreatePaginatedResult<T>(pagedRequest);
+        return await query.CreatePaginatedResult<T>(pagedRequest, cancellationToken);
     }
 
     private IQueryable<T> IncludeProperties(params Expression<Func<T, object>>[] includeProperties)

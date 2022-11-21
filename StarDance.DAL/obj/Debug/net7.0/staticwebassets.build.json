@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "HMxOKaUeosAgc5Q/WYsHMDI1i1eCQMbPaG9nO2dB1XA=",
+  "Hash": "mg7tY7onRjnIbsknQnDYoQd92TtaiQ2bY30gwkjS5nc=",
   "Source": "StarDance.DAL",
   "BasePath": "_content/StarDance.DAL",
   "Mode": "Default",
@@ -12,10 +12,10 @@
       "Source": "StarDance.Domain",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
       "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
-      "AdditionalPublishPropertiesToRemove": "TargetFramework",
+      "AdditionalPublishPropertiesToRemove": "TargetFramework;RuntimeIdentifier;SelfContained",
       "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
       "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
-      "AdditionalBuildPropertiesToRemove": "TargetFramework"
+      "AdditionalBuildPropertiesToRemove": "TargetFramework;RuntimeIdentifier;SelfContained"
     }
   ],
   "DiscoveryPatterns": [],

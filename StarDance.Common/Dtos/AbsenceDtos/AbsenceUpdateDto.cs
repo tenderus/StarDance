@@ -6,7 +6,7 @@ namespace StarDance.Common.Dtos.AbsenceDtos;
 
 public class AbsenceUpdateDto
 {
-    [Required] public virtual ClientPartialUpdateDto ClientPartialUpdateDto { get; set; }
+    [Required] public int ClientId { get; set; }
 
-    [Required] public virtual LessonPartialUpdateDto LessonPartialUpdateDto { get; set; }
+    [Required] public int LessonId { get; set; }
 }

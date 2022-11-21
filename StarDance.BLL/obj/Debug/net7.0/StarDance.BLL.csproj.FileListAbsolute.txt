@@ -1,6 +1,3 @@
-/Users/tany/Projects/StarDance/StarDance.BLL/bin/Debug/net7.0/StarDance.Domain.deps.json
-/Users/tany/Projects/StarDance/StarDance.BLL/bin/Debug/net7.0/StarDance.Domain.runtimeconfig.json
-/Users/tany/Projects/StarDance/StarDance.BLL/bin/Debug/net7.0/StarDance.Domain
 /Users/tany/Projects/StarDance/StarDance.BLL/bin/Debug/net7.0/StarDance.BLL.deps.json
 /Users/tany/Projects/StarDance/StarDance.BLL/bin/Debug/net7.0/StarDance.BLL.dll
 /Users/tany/Projects/StarDance/StarDance.BLL/bin/Debug/net7.0/StarDance.BLL.pdb

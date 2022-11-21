@@ -16,12 +16,10 @@ public class LessonReadDto
     public TeacherReadDto TeacherReadDto { get; set; }
 
     public RoomReadDto RoomReadDto { get; set; }
-    
-    public string DanceType { get; set; }
-    
+
     public ICollection<ClientReadDto> Clients { get; set; }
-    
-    public int FreePlaces { get; set; }
-    
-    public ICollection<QueueReadDto> Queues { get; set; }
+
+    public int FreePlaces => RoomReadDto.Capacity - Clients.Count;
+
+    // public ICollection<QueueReadDto> Queues { get; set; }
 }

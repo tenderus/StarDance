@@ -1,22 +1,23 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using StarDance.Common.Dtos.LessonDtos;
 using StarDance.DAL.Interfaces;
 using StarDance.Domain;
 
 namespace StarDance.DAL;
 
-public class LessonRepository : ILessonRepository
+public class LessonRepository : Repository<Lesson>, ILessonRepository
 {
     private readonly StarDanceContext _context;
 
-    public LessonRepository(StarDanceContext appDbContext)
+    public LessonRepository(StarDanceContext appDbContext) : base(appDbContext)
     {
         _context = appDbContext;
     }
-    
-    public async Task<Lesson> GetByDancetypeAsync(string dancetype, params Expression<Func<Lesson, object>>[] includeProperties)
+
+    public async Task<Lesson> GetByDancetypeAsync(string dancetype, CancellationToken cancellationToken, params Expression<Func<Lesson, object>>[] includeProperties)
     {
-        var query = await IncludeProperties(includeProperties).FirstOrDefaultAsync(x => x.Teacher.DanceType.Name == dancetype);
+        var query = await IncludeProperties(includeProperties).FirstOrDefaultAsync(x => x.Teacher.DanceType.Name == dancetype, cancellationToken);
         return query ?? throw new InvalidOperationException();
     }
     

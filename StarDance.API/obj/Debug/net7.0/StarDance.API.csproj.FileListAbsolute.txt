@@ -31,9 +31,6 @@
 /Users/tany/Projects/StarDance/StarDance.API/obj/Debug/net7.0/StarDance.API.pdb
 /Users/tany/Projects/StarDance/StarDance.API/obj/Debug/net7.0/StarDance.API.genruntimeconfig.cache
 /Users/tany/Projects/StarDance/StarDance.API/obj/Debug/net7.0/ref/StarDance.API.dll
-/Users/tany/Projects/StarDance/StarDance.API/bin/Debug/net7.0/StarDance.Domain.deps.json
-/Users/tany/Projects/StarDance/StarDance.API/bin/Debug/net7.0/StarDance.Domain.runtimeconfig.json
-/Users/tany/Projects/StarDance/StarDance.API/bin/Debug/net7.0/StarDance.Domain
 /Users/tany/Projects/StarDance/StarDance.API/bin/Debug/net7.0/AutoMapper.dll
 /Users/tany/Projects/StarDance/StarDance.API/bin/Debug/net7.0/Microsoft.Data.SqlClient.dll
 /Users/tany/Projects/StarDance/StarDance.API/bin/Debug/net7.0/Microsoft.EntityFrameworkCore.dll

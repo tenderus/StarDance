@@ -3,7 +3,7 @@ using StarDance.Domain;
 
 namespace StarDance.DAL.Interfaces;
 
-public interface ILessonRepository
+public interface ILessonRepository : IRepository<Lesson>
 {
-    Task<Lesson> GetByDancetypeAsync(string dancetype, params Expression<Func<Lesson, object>>[] includeProperties);
+    Task<Lesson> GetByDancetypeAsync(string dancetype,CancellationToken cancellationToken, params Expression<Func<Lesson, object>>[] includeProperties);
 }

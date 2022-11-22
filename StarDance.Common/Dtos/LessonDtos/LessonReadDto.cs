@@ -1,7 +1,5 @@
-using System.Text.Json.Serialization;
+using StarDance.Common.Dtos.AbsenceDtos;
 using StarDance.Common.Dtos.ClientDtos;
-using StarDance.Common.Dtos.DanceTypeDtos;
-using StarDance.Common.Dtos.QueueDtos;
 using StarDance.Common.Dtos.RoomDtos;
 using StarDance.Common.Dtos.TeacherDtos;
 
@@ -20,6 +18,7 @@ public class LessonReadDto
     public ICollection<ClientReadDto> Clients { get; set; }
 
     public int FreePlaces => RoomReadDto.Capacity - Clients.Count;
-
-    // public ICollection<QueueReadDto> Queues { get; set; }
+    
+    public ICollection<AbsenceReadDto> Absences { get; set; }
+    
 }

@@ -9,5 +9,7 @@ public class AbsenceProfile : Profile
     public AbsenceProfile()
     {
         CreateMap<AbsenceUpdateDto, Absence>();
+        CreateMap<Absence, AbsenceReadDto>();
+        
     }
 }

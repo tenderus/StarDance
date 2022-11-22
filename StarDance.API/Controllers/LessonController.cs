@@ -50,18 +50,16 @@ namespace StarDance.API.Controllers;
         }
         
         [HttpPost]
-        public async Task<LessonReadDto> CreateLesson([FromBody] LessonUpdateDto lessonUpdateDto, CancellationToken cancellationToken)
+        public async Task<LessonUpdateDto> CreateLesson([FromBody] LessonUpdateDto lessonUpdateDto, CancellationToken cancellationToken)
         {
             var lessonReadDto = await _lessonService.CreateLessonAsync(lessonUpdateDto, cancellationToken);
             return lessonReadDto;
         }
         
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteLesson(int id, CancellationToken cancellationToken)
+        public async Task DeleteLesson(int id, CancellationToken cancellationToken)
         {
-            var isDeleted = await _lessonService.DeleteLessonAsync(id, cancellationToken);
-
-            return isDeleted;
+            await _lessonService.DeleteLessonAsync(id, cancellationToken);
         }
         
         [HttpPut("{id}")]
@@ -89,6 +87,13 @@ namespace StarDance.API.Controllers;
         public async Task<List<LessonReadDto>> GetLessonsByClient(int id, CancellationToken cancellationToken)
         {
             var lessonReadDto = await _lessonService.GetLessonsByClientId(id, cancellationToken);
+            return lessonReadDto;
+        }
+        
+        [HttpGet("lessonsOfTeacher/{id}")]
+        public async Task<List<LessonReadDto>> GetLessonsByTeacher(int id, CancellationToken cancellationToken)
+        {
+            var lessonReadDto = await _lessonService.GetLessonsByTeacherId(id, cancellationToken);
             return lessonReadDto;
         }
         

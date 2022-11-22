@@ -49,11 +49,9 @@ namespace StarDance.API.Controllers;
         
         
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteClient(int id, CancellationToken cancellationToken)
+        public async Task DeleteClient(int id, CancellationToken cancellationToken)
         {
-            var isDeleted = await _clientService.DeleteClientAsync(id, cancellationToken);
-
-            return isDeleted;
+            await _clientService.DeleteClientAsync(id, cancellationToken);
         }
         
         [HttpPut("{id}")]

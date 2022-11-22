@@ -9,6 +9,6 @@ public class DanceTypeProfile : Profile
     public DanceTypeProfile()
     {
         CreateMap<DanceType, DanceTypeReadDto>()
-            .ForMember(x => x.TeachersReadDtos, y => y.MapFrom(z => z.Teachers));;
+            .ForMember(x => x.TeachersReadDtos, y => y.MapFrom(z => z.Teachers));
     }
 }

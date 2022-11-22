@@ -67,16 +67,14 @@ public class ClientService : IClientService
         var clientReadDto = _mapper.Map<ClientReadDto>(clientModel);
         return clientReadDto;
     }
-    
-    public async Task<bool> DeleteClientAsync(int id, CancellationToken cancellationToken)
+
+    public async Task DeleteClientAsync(int id, CancellationToken cancellationToken)
     {
         var client = await _repository.GetByIdAsync(id, cancellationToken);
         if (client != null)
         {
             _repository.Delete(client);
             await _repository.SaveChangesAsync(cancellationToken);
-            return true;
         }
-        return false;
     }
 }

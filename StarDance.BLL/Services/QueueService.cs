@@ -93,7 +93,7 @@ public class QueueService : IQueueService
             LessonId = lessonClientCreateDto.LessonId,
             NumberOfOrder = lesson.Queues.Count + 1
         };
-        if (lesson.Queues.FirstOrDefault(x => x.ClientId == lessonClientCreateDto.ClientId) is not null)
+        if (lesson.Queues.Any(x => x.ClientId == lessonClientCreateDto.ClientId))
         {
             throw new ClientAlreadyRegisteredAtLessonException("Client is already in queue");
         }

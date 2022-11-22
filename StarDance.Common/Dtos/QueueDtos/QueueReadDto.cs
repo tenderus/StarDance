@@ -1,6 +1,3 @@
-using StarDance.Common.Dtos.ClientDtos;
-using StarDance.Common.Dtos.LessonDtos;
-
 namespace StarDance.Common.Dtos.QueueDtos;
 
 public class QueueReadDto

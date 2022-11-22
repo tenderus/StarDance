@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 using StarDance.Common.Dtos.LessonDtos;
 
 namespace StarDance.Common.Dtos.ClientDtos;

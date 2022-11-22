@@ -43,7 +43,7 @@ public class TeacherService : ITeacherService
     {
         var teacher = await _repository.GetByIdAsync(id, cancellationToken,
             teacher => teacher.User,
-                teacher => teacher.DanceType,
+            teacher => teacher.DanceType,
             teacher => teacher.Lessons);
         var teacherDto = _mapper.Map<TeacherReadDto>(teacher);
         return teacherDto;
@@ -80,15 +80,13 @@ public class TeacherService : ITeacherService
         return teacherReadDto;
     }
 
-    public async Task<bool> DeleteTeacherAsync(int id, CancellationToken cancellationToken)
+    public async Task DeleteTeacherAsync(int id, CancellationToken cancellationToken)
     {
         var teacher = await _repository.GetByIdAsync(id, cancellationToken);
         if (teacher != null)
         {
             _repository.Delete(teacher);
             await _repository.SaveChangesAsync(cancellationToken);
-            return true;
         }
-        return false;
     }
 }

@@ -25,26 +25,23 @@ public class LessonService : ILessonService
         _queueService = queueService;
     }
 
-    public async Task<LessonReadDto> CreateLessonAsync(LessonUpdateDto dto, CancellationToken cancellationToken)
+    public async Task<LessonUpdateDto> CreateLessonAsync(LessonUpdateDto dto, CancellationToken cancellationToken)
     {
 
         var lessonModel = _mapper.Map<Lesson>(dto);
         await _lessonRepository.AddAsync(lessonModel, cancellationToken);
         await _lessonRepository.SaveChangesAsync(cancellationToken);
-        var lessonReadDto = _mapper.Map<LessonReadDto>(lessonModel);
-        return lessonReadDto;
+        return dto;
     }
 
-    public async Task<bool> DeleteLessonAsync(int id, CancellationToken cancellationToken)
+    public async Task DeleteLessonAsync(int id, CancellationToken cancellationToken)
     {
         var lesson = await _lessonRepository.GetByIdAsync(id, cancellationToken);
         if (lesson != null)
         {
             _lessonRepository.Delete(lesson);
             await _lessonRepository.SaveChangesAsync(cancellationToken);
-            return true;
         }
-        return false;
     }
     
     public async Task<List<LessonReadDto>> GetLessonsByClientId(int id, CancellationToken cancellationToken)
@@ -59,7 +56,18 @@ public class LessonService : ILessonService
         var lessonReadDtos = _mapper.Map<List<LessonReadDto>>(lessonsOfClient);
 
         return lessonReadDtos;
+    }
+    
+    public async Task<List<LessonReadDto>> GetLessonsByTeacherId(int id, CancellationToken cancellationToken)
+    {
+        var lessonsOfTeacher = await _lessonRepository.FindAllWithIncludeAsync(lesson => lesson.Teacher.UserId == id,
+            cancellationToken,
+            lesson => lesson.Clients,
+            lesson => lesson.Room,
+            lesson => lesson.Teacher.DanceType);
+        var lessonReadDtos = _mapper.Map<List<LessonReadDto>>(lessonsOfTeacher);
 
+        return lessonReadDtos;
     }
     
     public async Task<PaginatedResult<LessonReadDto>> GetPagedResult(PagedRequest pagedRequest, CancellationToken cancellationToken)
@@ -68,7 +76,8 @@ public class LessonService : ILessonService
             x=> x.Clients,
             x => x.Teacher.User,
             x => x.Teacher.DanceType,
-            x => x.Room);
+            x => x.Room,
+            x => x.Absences);
         var lessonListDtos = _mapper.Map<PaginatedResult<LessonReadDto>>(lessonsList);
         return lessonListDtos;
     }

@@ -55,11 +55,9 @@ public class TeacherController : ControllerBase
     }
     
     [HttpDelete("{id}")]
-    public async Task<bool> DeleteTeacher(int id, CancellationToken cancellationToken)
+    public async Task DeleteTeacher(int id, CancellationToken cancellationToken)
     {
-        var isDeleted = await _teacherService.DeleteTeacherAsync(id, cancellationToken);
-    
-        return isDeleted;
+        await _teacherService.DeleteTeacherAsync(id, cancellationToken);
     }
     
     [HttpPut("{id}")]

@@ -11,5 +11,5 @@ public interface ITeacherService
     Task<PaginatedResult<TeacherReadDto>> GetPagedResult(PagedRequest pagedRequest, CancellationToken cancellationToken);
     Task<TeacherReadDto> AddTeacherAsync(TeacherUpdateDto dto, CancellationToken cancellationToken);
     Task<TeacherReadDto> UpdateTeacherAsync(int id, TeacherUpdateDto dto, CancellationToken cancellationToken);
-    Task<bool> DeleteTeacherAsync(int id, CancellationToken cancellationToken);
+    Task DeleteTeacherAsync(int id, CancellationToken cancellationToken);
 }

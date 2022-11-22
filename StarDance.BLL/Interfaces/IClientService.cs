@@ -9,6 +9,6 @@ public interface IClientService
     Task<ClientReadDto> GetByEmailAsync(string email, CancellationToken cancellationToken);
     Task<ClientReadDto> GetByIdAsync(int id, CancellationToken cancellationToken);
     Task<ClientReadDto> UpdateClientAsync(int id, ClientUpdateDto dto, CancellationToken cancellationToken);
-    Task<bool> DeleteClientAsync(int id, CancellationToken cancellationToken);
+    Task DeleteClientAsync(int id, CancellationToken cancellationToken);
     
 }

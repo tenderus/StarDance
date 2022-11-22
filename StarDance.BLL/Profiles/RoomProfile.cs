@@ -1,5 +1,4 @@
 using AutoMapper;
-using StarDance.Common.Dtos.LessonDtos;
 using StarDance.Common.Dtos.RoomDtos;
 using StarDance.Domain;
 

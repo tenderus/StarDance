@@ -1,6 +1,5 @@
 using AutoMapper;
 using StarDance.Common.Dtos.ClientDtos;
-using StarDance.Common.Dtos.LessonDtos;
 using StarDance.Domain;
 
 namespace StarDance.BLL.Profiles;
